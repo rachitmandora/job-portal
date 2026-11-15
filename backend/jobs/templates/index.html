@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerHub | Professional Job Portal</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --success-hover: #059669;
+            --danger: #ef4444;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-color); color: var(--text-main); line-height: 1.5; padding: 40px 20px; }
+        
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-size: 2.2rem; color: var(--primary); font-weight: 700; letter-spacing: -0.5px; }
+        header p { color: var(--text-muted); font-size: 0.95rem; margin-top: 5px; }
+
+        .card { background: var(--card-bg); padding: 30px; margin-bottom: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border: 1px solid var(--border); }
+        
+        h3 { font-size: 1.25rem; margin-bottom: 20px; font-weight: 600; color: var(--text-main); }
+
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input, textarea { width: 100%; padding: 12px 14px; margin-bottom: 18px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; transition: border-color 0.2s, box-shadow 0.2s; outline: none; }
+        input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        textarea { resize: vertical; min-height: 100px; }
+
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; font-size: 0.95rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+        button:hover { background: var(--primary-hover); }
+        button:active { transform: scale(0.98); }
+        
+        .btn-green { background: var(--success); }
+        .btn-green:hover { background: var(--success-hover); }
+        
+        .btn-secondary { background: #64748b; }
+        .btn-secondary:hover { background: #475569; }
+
+        .logout-btn { background: var(--danger); padding: 8px 16px; font-size: 0.85rem; float: right; }
+        .logout-btn:hover { background: #dc2626; }
+
+        .button-group { display: flex; gap: 12px; align-items: center; margin-top: 5px; }
+        .hidden { display: none !important; }
+
+        .job-item { border: 1px solid var(--border); background: #ffffff; padding: 20px; margin-bottom: 16px; border-radius: 10px; transition: transform 0.2s, box-shadow 0.2s; }
+        .job-item:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+        .job-item h4 { font-size: 1.15rem; color: var(--primary); margin-bottom: 6px; }
+        .job-company-tag { font-weight: 600; color: var(--text-main); font-size: 0.95rem; margin-bottom: 8px; display: block; }
+        .job-desc { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 12px; }
+        .job-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px; }
+        .job-meta { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+        /* Modal Overlays */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal-card { background: white; padding: 35px; border-radius: 16px; width: 100%; max-width: 550px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); max-height: 90vh; overflow-y: auto; text-align: center; }
+
+        /* Success Card Styling */
+        .success-icon { font-size: 50px; color: var(--success); margin-bottom: 15px; }
+        .success-card h3 { color: var(--success); margin-bottom: 10px; }
+        .success-card p { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+
+        #auth-status { font-size: 0.85rem; margin-top: 12px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>CareerHub</h1>
+            <p>Find your next opportunity or post positions instantly</p>
+        </header>
+
+        <!-- 1. LOGIN SCREEN -->
+        <div class="card" id="auth-section">
+            <h3>Welcome Back</h3>
+            <label>Username</label>
+            <input type="text" id="username" placeholder="Enter your username">
+            
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter your password">
+            
+            <div class="button-group">
+                <button onclick="login()" style="flex: 1;">Sign In</button>
+                <button class="btn-green" onclick="showPostJobModal()" style="flex: 1;">+ Post New Job</button>
+            </div>
+            <p id="auth-status" style="color: var(--danger);"></p>
+        </div>
+
+        <!-- POST NEW JOB MODAL -->
+        <div class="modal-overlay hidden" id="post-job-modal">
+            <div class="modal-card" style="text-align: left;">
+                <h3>Post a New Job Opening</h3>
+                
+                <label>Job Title</label>
+                <input type="text" id="job-title" placeholder="e.g. Senior Backend Engineer">
+                
+                <label>Company Name</label>
+                <input type="text" id="job-company" placeholder="e.g. Acme Corporation">
+                
+                <label>Location</label>
+                <input type="text" id="job-location" placeholder="e.g. Remote / New York, NY">
+                
+                <label>Salary Range</label>
+                <input type="text" id="job-salary" placeholder="e.g. $120,000 - $140,000/yr">
+                
+                <label>Job Description</label>
+                <textarea id="job-desc" placeholder="Detail the role requirements, responsibilities, and perks..."></textarea>
+                
+                <div class="button-group" style="justify-content: flex-end;">
+                    <button class="btn-secondary" onclick="hidePostJobModal()">Cancel</button>
+                    <button class="btn-green" onclick="postJob()">Publish Job Listing</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUCCESSFUL APPLICATION MODAL -->
+        <div class="modal-overlay hidden" id="success-modal">
+            <div class="modal-card success-card">
+                <div class="success-icon">✅</div>
+                <h3>Successfully Applied!</h3>
+                <p>Your job application has been successfully submitted. Good luck!</p>
+                <button class="btn-green" onclick="closeSuccessModal()" style="width: 100%;">Got it</button>
+            </div>
+        </div>
+
+        <!-- 2. MAIN DASHBOARD FOR LOGGED-IN USERS -->
+        <div id="dashboard-section" class="hidden">
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 30px;">
+                <div>
+                    <h2 id="welcome-msg" style="font-size: 1.4rem; color: var(--primary);">Welcome!</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Browse active openings and apply with a single click.</p>
+                </div>
+                <button class="logout-btn" onclick="logout()">Sign Out</button>
+            </div>
+
+            <!-- Available Jobs Listing -->
+            <div class="card">
+                <h3>Available Job Openings</h3>
+                <div id="job-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "/api";
+        let accessToken = "";
+
+        function showPostJobModal() {
+            document.getElementById("post-job-modal").classList.remove("hidden");
+        }
+
+        function hidePostJobModal() {
+            document.getElementById("post-job-modal").classList.add("hidden");
+        }
+
+        function closeSuccessModal() {
+            document.getElementById("success-modal").classList.add("hidden");
+        }
+
+        async function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch(`${API_URL}/login/`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    accessToken = data.access;
+                    document.getElementById("auth-section").classList.add("hidden");
+                    document.getElementById("dashboard-section").classList.remove("hidden");
+                    document.getElementById("welcome-msg").innerText = `Welcome back, ${username}!`;
+                    fetchJobs();
+                } else {
+                    document.getElementById("auth-status").innerText = "Authentication failed: Invalid credentials.";
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Network error during login.");
+            }
+        }
+
+        function logout() {
+            accessToken = "";
+            document.getElementById("auth-section").classList.remove("hidden");
+            document.getElementById("dashboard-section").classList.add("hidden");
+            hidePostJobModal();
+            closeSuccessModal();
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("auth-status").innerText = "";
+        }
+
+        async function fetchJobs() {
+            try {
+                const response = await fetch(`${API_URL}/jobs/`);
+                const jobs = await response.json();
+                const jobListDiv = document.getElementById("job-list");
+                jobListDiv.innerHTML = "";
+
+                if (!jobs || jobs.length === 0) {
+                    jobListDiv.innerHTML = "<p style='color: var(--text-muted); text-align: center; padding: 20px;'>No job openings available right now. Click '+ Post New Job' above to publish one!</p>";
+                    return;
+                }
+
+                jobs.reverse().forEach(job => {
+                    jobListDiv.innerHTML += `
+                        <div class="job-item">
+                            <h4>${job.title}</h4>
+                            <span class="job-company-tag">🏢 ${job.company}</span>
+                            <p class="job-desc">${job.description}</p>
+                            <div class="job-footer">
+                                <span class="job-meta">📍 ${job.location} &nbsp;|&nbsp; 💰 ${job.salary}</span>
+                                <button class="btn-green" onclick="applyJob(${job.id})" style="padding: 8px 16px; font-size: 0.85rem;">Apply Now</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function postJob() {
+            const payload = {
+                title: document.getElementById("job-title").value,
+                company: document.getElementById("job-company").value,
+                location: document.getElementById("job-location").value,
+                salary: document.getElementById("job-salary").value,
+                description: document.getElementById("job-desc").value
+            };
+
+            if (!payload.title || !payload.company) {
+                alert("Please fill in at least the Job Title and Company Name fields.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/jobs/create/`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert("Job published successfully!");
+                    document.getElementById("job-title").value = "";
+                    document.getElementById("job-company").value = "";
+                    document.getElementById("job-location").value = "";
+                    document.getElementById("job-salary").value = "";
+                    document.getElementById("job-desc").value = "";
+                    
+                    hidePostJobModal();
+                    
+                    if (accessToken) {
+                        fetchJobs();
+                    }
+                } else {
+                    const errorData = await response.json();
+                    alert("Failed to publish job: " + JSON.stringify(errorData));
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Network error.");
+            }
+        }
+
+        async function applyJob(jobId) {
+            if (!accessToken) {
+                alert("Please log in first to apply for jobs!");
+                return;
+            }
+
+            const coverLetter = prompt("Enter a brief cover letter (optional):") || "";
+
+            try {
+                // Using FormData to fulfill requirements without requiring a file upload
+                const formData = new FormData();
+                formData.append("cover_letter", coverLetter);
+
+                const response = await fetch(`${API_URL}/jobs/${jobId}/apply/`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${accessToken}`
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    document.getElementById("success-modal").classList.remove("hidden");
+                } else {
+                    const data = await response.json();
+                    alert("Failed to apply: " + JSON.stringify(data));
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Network error during application.");
+            }
+        }
+    </script>
+</body>
+</html>
